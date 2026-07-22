@@ -343,48 +343,56 @@
                 <p style="font-size: 13px; color: #666; margin-bottom: 1rem;">Digite o saldo total de cada banco/corretora</p>
                 <div class="form-row">
                     <div class="form-item">
-                        <label>XP (R$)</label>
-                        <input type="number" id="bankXP" placeholder="0.00" step="0.01" />
+                        <label>XP</label>
+                        <input type="text" id="bankXP" class="currency-input" placeholder="R$ 0,00" />
                     </div>
                     <div class="form-item">
-                        <label>Itaú (R$)</label>
-                        <input type="number" id="bankItau" placeholder="0.00" step="0.01" />
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-item">
-                        <label>Caixa (R$)</label>
-                        <input type="number" id="bankCaixa" placeholder="0.00" step="0.01" />
-                    </div>
-                    <div class="form-item">
-                        <label>Mercado Pago (R$)</label>
-                        <input type="number" id="bankMercadoPago" placeholder="0.00" step="0.01" />
+                        <label>Itaú</label>
+                        <input type="text" id="bankItau" class="currency-input" placeholder="R$ 0,00" />
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-item">
-                        <label>Bradesco (R$)</label>
-                        <input type="number" id="bankBradesco" placeholder="0.00" step="0.01" />
+                        <label>Caixa</label>
+                        <input type="text" id="bankCaixa" class="currency-input" placeholder="R$ 0,00" />
+                    </div>
+                    <div class="form-item">
+                        <label>Mercado Pago</label>
+                        <input type="text" id="bankMercadoPago" class="currency-input" placeholder="R$ 0,00" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-item">
+                        <label>Bradesco</label>
+                        <input type="text" id="bankBradesco" class="currency-input" placeholder="R$ 0,00" />
                     </div>
                 </div>
             </div>
 
             <div class="section">
-                <h2>👨 Aposentadoria do Pai</h2>
-                <div class="form-row full">
+                <h2>👨 Receitas - Pai</h2>
+                <div class="form-row">
                     <div class="form-item">
-                        <label>Valor mensal (R$)</label>
-                        <input type="number" id="pensionDad" placeholder="0.00" step="0.01" />
+                        <label>Salário (mensal)</label>
+                        <input type="text" id="salarydad" class="currency-input" placeholder="R$ 0,00" />
+                    </div>
+                    <div class="form-item">
+                        <label>Aposentadoria (mensal)</label>
+                        <input type="text" id="pensionDad" class="currency-input" placeholder="R$ 0,00" />
                     </div>
                 </div>
             </div>
 
             <div class="section">
-                <h2>👩 Aposentadoria da Mãe</h2>
-                <div class="form-row full">
+                <h2>👩 Receitas - Mãe</h2>
+                <div class="form-row">
                     <div class="form-item">
-                        <label>Valor mensal (R$)</label>
-                        <input type="number" id="pensionMom" placeholder="0.00" step="0.01" />
+                        <label>Salário (mensal)</label>
+                        <input type="text" id="salarymom" class="currency-input" placeholder="R$ 0,00" />
+                    </div>
+                    <div class="form-item">
+                        <label>Aposentadoria (mensal)</label>
+                        <input type="text" id="pensionMom" class="currency-input" placeholder="R$ 0,00" />
                     </div>
                 </div>
             </div>
@@ -393,49 +401,77 @@
                 <h2>🏠 Receitas - Aluguéis</h2>
                 <div class="form-row">
                     <div class="form-item">
-                        <label>Aluguel São Mateus (R$)</label>
-                        <input type="number" id="rentalSaoMateus" placeholder="0.00" step="0.01" />
+                        <label>Aluguel São Mateus (mensal)</label>
+                        <input type="text" id="rentalSaoMateus" class="currency-input" placeholder="R$ 0,00" />
                     </div>
                     <div class="form-item">
-                        <label>Aluguel Mauá (R$)</label>
-                        <input type="number" id="rentalMaua" placeholder="0.00" step="0.01" />
+                        <label>Aluguel Mauá (mensal)</label>
+                        <input type="text" id="rentalMaua" class="currency-input" placeholder="R$ 0,00" />
                     </div>
                 </div>
             </div>
 
             <div class="section">
-                <h2>💳 Despesas</h2>
+                <h2>💳 Despesas Mensais</h2>
                 <div class="form-row">
                     <div class="form-item">
-                        <label>Supermercado (R$)</label>
-                        <input type="number" id="expenseSupermarket" placeholder="0.00" step="0.01" />
+                        <label>Supermercado</label>
+                        <input type="text" id="expenseSupermarket" class="currency-input" placeholder="R$ 0,00" />
                     </div>
                     <div class="form-item">
-                        <label>Outras despesas (R$)</label>
-                        <input type="number" id="expenseOther" placeholder="0.00" step="0.01" />
+                        <label>Moradia</label>
+                        <input type="text" id="expenseHousing" class="currency-input" placeholder="R$ 0,00" />
                     </div>
                 </div>
-                <p style="font-size: 12px; color: #999;">Moradia, saúde, educação, transporte, seguros, etc.</p>
+                <div class="form-row">
+                    <div class="form-item">
+                        <label>Saúde</label>
+                        <input type="text" id="expenseHealth" class="currency-input" placeholder="R$ 0,00" />
+                    </div>
+                    <div class="form-item">
+                        <label>Carro</label>
+                        <input type="text" id="expenseCar" class="currency-input" placeholder="R$ 0,00" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-item">
+                        <label>Viagem</label>
+                        <input type="text" id="expenseTravel" class="currency-input" placeholder="R$ 0,00" />
+                    </div>
+                    <div class="form-item">
+                        <label>Outras Despesas</label>
+                        <input type="text" id="expenseOther" class="currency-input" placeholder="R$ 0,00" />
+                    </div>
+                </div>
             </div>
 
             <div class="section">
-                <h2>💾 Histórico Patrimonial</h2>
+                <h2>📂 Histórico Patrimonial</h2>
+                <p style="font-size: 13px; color: #666; margin-bottom: 1rem;">Carregue o relatório do mês anterior para continuar o acompanhamento</p>
+                <div class="upload-area" onclick="document.getElementById('fileUploadHistory').click();" style="margin-bottom: 1rem;">
+                    <strong>Carregar Relatório Anterior</strong>
+                    <p>Clique para selecionar arquivo JSON exportado</p>
+                    <p style="font-size: 12px; color: #999;">O saldo anterior será preenchido automaticamente</p>
+                </div>
+                <input type="file" id="fileUploadHistory" accept=".json" style="display: none;" />
+                <p id="uploadStatus" style="font-size: 12px; color: #27ae60; margin-bottom: 1rem;"></p>
+                
                 <div class="form-row">
                     <div class="form-item">
-                        <label>Saldo anterior (R$)</label>
-                        <input type="number" id="previousWealth" placeholder="0.00" step="0.01" />
+                        <label>Saldo anterior (investimentos + conta corrente)</label>
+                        <input type="text" id="previousWealth" class="currency-input" placeholder="R$ 0,00" />
                     </div>
                     <div class="form-item">
                         <label>Mês de referência</label>
-                        <input type="text" id="monthYear" placeholder="Ex: Julho 2024" />
+                        <input type="text" id="monthYear" placeholder="Ex: Agosto 2024" />
                     </div>
                 </div>
-                <p style="font-size: 12px; color: #999;">O saldo será salvo automaticamente para próximas consultas</p>
+                <p style="font-size: 12px; color: #999;">O saldo será exportado ao final para uso no próximo relatório</p>
             </div>
 
             <div class="button-group">
                 <button onclick="resetForm()">Limpar formulário</button>
-                <button class="primary" onclick="generateReport()" id="generateBtn">Gerar relatório</button>
+                <button class="primary" onclick="generateReportMain()" id="generateBtn">Gerar relatório</button>
             </div>
         </div>
 
@@ -445,20 +481,56 @@
     <script>
         let chartInstances = {};
 
-        function generateReport() {
-            const bankXP = parseFloat(document.getElementById('bankXP').value) || 0;
-            const bankItau = parseFloat(document.getElementById('bankItau').value) || 0;
-            const bankCaixa = parseFloat(document.getElementById('bankCaixa').value) || 0;
-            const bankMercadoPago = parseFloat(document.getElementById('bankMercadoPago').value) || 0;
-            const bankBradesco = parseFloat(document.getElementById('bankBradesco').value) || 0;
+        // Formata inputs como moeda em tempo real
+        function formatCurrency(input) {
+            let value = input.value.replace(/\D/g, '');
+            value = (value / 100).toFixed(2);
+            input.value = 'R$ ' + value.replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        }
+
+        function attachCurrencyFormatters() {
+            const currencyInputs = document.querySelectorAll('.currency-input');
+            currencyInputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    formatCurrency(this);
+                });
+                // Formata valor inicial se houver
+                if (this.value) {
+                    formatCurrency(this);
+                }
+            });
+        }
+
+        function getCurrencyValue(input) {
+            if (!input.value) return 0;
+            return parseFloat(input.value.replace(/[^\d,]/g, '').replace(',', '.'));
+        }
+
+        function generateReportMain() {
+            attachCurrencyFormatters();
+
+            const bankXP = getCurrencyValue(document.getElementById('bankXP'));
+            const bankItau = getCurrencyValue(document.getElementById('bankItau'));
+            const bankCaixa = getCurrencyValue(document.getElementById('bankCaixa'));
+            const bankMercadoPago = getCurrencyValue(document.getElementById('bankMercadoPago'));
+            const bankBradesco = getCurrencyValue(document.getElementById('bankBradesco'));
             
-            const pensionDad = parseFloat(document.getElementById('pensionDad').value) || 0;
-            const pensionMom = parseFloat(document.getElementById('pensionMom').value) || 0;
-            const rentalSaoMateus = parseFloat(document.getElementById('rentalSaoMateus').value) || 0;
-            const rentalMaua = parseFloat(document.getElementById('rentalMaua').value) || 0;
-            const expenseSupermarket = parseFloat(document.getElementById('expenseSupermarket').value) || 0;
-            const expenseOther = parseFloat(document.getElementById('expenseOther').value) || 0;
-            const previousWealth = parseFloat(document.getElementById('previousWealth').value) || 0;
+            const salaryDad = getCurrencyValue(document.getElementById('salarydad'));
+            const pensionDad = getCurrencyValue(document.getElementById('pensionDad'));
+            const salaryMom = getCurrencyValue(document.getElementById('salarymom'));
+            const pensionMom = getCurrencyValue(document.getElementById('pensionMom'));
+            
+            const rentalSaoMateus = getCurrencyValue(document.getElementById('rentalSaoMateus'));
+            const rentalMaua = getCurrencyValue(document.getElementById('rentalMaua'));
+            
+            const expenseSupermarket = getCurrencyValue(document.getElementById('expenseSupermarket'));
+            const expenseHousing = getCurrencyValue(document.getElementById('expenseHousing'));
+            const expenseHealth = getCurrencyValue(document.getElementById('expenseHealth'));
+            const expenseCar = getCurrencyValue(document.getElementById('expenseCar'));
+            const expenseTravel = getCurrencyValue(document.getElementById('expenseTravel'));
+            const expenseOther = getCurrencyValue(document.getElementById('expenseOther'));
+            
+            const previousWealth = getCurrencyValue(document.getElementById('previousWealth'));
             const monthYear = document.getElementById('monthYear').value || 'Mês Atual';
             
             const currentWealth = bankXP + bankItau + bankCaixa + bankMercadoPago + bankBradesco;
@@ -466,8 +538,12 @@
             const dashboardSection = document.getElementById('dashboardSection');
             dashboardSection.style.display = 'block';
 
-            const totalExpenses = expenseSupermarket + expenseOther;
-            const totalIncome = pensionDad + pensionMom + rentalSaoMateus + rentalMaua;
+            const totalExpenses = expenseSupermarket + expenseHousing + expenseHealth + expenseCar + expenseTravel + expenseOther;
+            const totalIncomeDad = salaryDad + pensionDad;
+            const totalIncomeMom = salaryMom + pensionMom;
+            const totalRentals = rentalSaoMateus + rentalMaua;
+            const totalIncome = totalIncomeDad + totalIncomeMom + totalRentals;
+            
             const netResult = totalIncome - totalExpenses;
             const savingsRate = totalIncome > 0 ? (netResult / totalIncome) * 100 : 0;
             
@@ -578,13 +654,40 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td style="padding-left: 2rem;">Aposentadoria do Pai</td>
-                                <td class="currency">R$ ${pensionDad.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                            <tr style="background: #f0f0f0; font-weight: 600;">
+                                <td colspan="2"><strong>Receitas - Pai</strong></td>
                             </tr>
                             <tr>
-                                <td style="padding-left: 2rem;">Aposentadoria da Mãe</td>
+                                <td style="padding-left: 2rem;">Salário</td>
+                                <td class="currency">R$ ${salaryDad.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 2rem;">Aposentadoria</td>
+                                <td class="currency">R$ ${pensionDad.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                            </tr>
+                            <tr style="background: #f5f5f5;">
+                                <td style="padding-left: 2rem;"><strong>Subtotal Pai</strong></td>
+                                <td class="currency"><strong>R$ ${totalIncomeDad.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</strong></td>
+                            </tr>
+                            
+                            <tr style="background: #f0f0f0; font-weight: 600;">
+                                <td colspan="2"><strong>Receitas - Mãe</strong></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 2rem;">Salário</td>
+                                <td class="currency">R$ ${salaryMom.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 2rem;">Aposentadoria</td>
                                 <td class="currency">R$ ${pensionMom.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                            </tr>
+                            <tr style="background: #f5f5f5;">
+                                <td style="padding-left: 2rem;"><strong>Subtotal Mãe</strong></td>
+                                <td class="currency"><strong>R$ ${totalIncomeMom.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</strong></td>
+                            </tr>
+                            
+                            <tr style="background: #f0f0f0; font-weight: 600;">
+                                <td colspan="2"><strong>Aluguéis</strong></td>
                             </tr>
                             <tr>
                                 <td style="padding-left: 2rem;">Aluguel - São Mateus</td>
@@ -594,7 +697,12 @@
                                 <td style="padding-left: 2rem;">Aluguel - Mauá</td>
                                 <td class="currency">R$ ${rentalMaua.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
                             </tr>
-                            <tr style="background: #f5f5f5; font-weight: 600;">
+                            <tr style="background: #f5f5f5;">
+                                <td style="padding-left: 2rem;"><strong>Subtotal Aluguéis</strong></td>
+                                <td class="currency"><strong>R$ ${totalRentals.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</strong></td>
+                            </tr>
+                            
+                            <tr style="background: #d5f4e6; font-weight: 600;">
                                 <td><strong>Total de Receitas</strong></td>
                                 <td class="currency"><strong>R$ ${totalIncome.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</strong></td>
                             </tr>
@@ -617,10 +725,26 @@
                                 <td class="currency">R$ ${expenseSupermarket.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
                             </tr>
                             <tr>
-                                <td style="padding-left: 2rem;">Outras Despesas Fixas</td>
+                                <td style="padding-left: 2rem;">Moradia</td>
+                                <td class="currency">R$ ${expenseHousing.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 2rem;">Saúde</td>
+                                <td class="currency">R$ ${expenseHealth.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 2rem;">Carro</td>
+                                <td class="currency">R$ ${expenseCar.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 2rem;">Viagem</td>
+                                <td class="currency">R$ ${expenseTravel.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 2rem;">Outras Despesas</td>
                                 <td class="currency">R$ ${expenseOther.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
                             </tr>
-                            <tr style="background: #f5f5f5; font-weight: 600;">
+                            <tr style="background: #fadbd8; font-weight: 600;">
                                 <td><strong>Total de Despesas</strong></td>
                                 <td class="currency"><strong>R$ ${totalExpenses.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</strong></td>
                             </tr>
@@ -691,10 +815,13 @@
                 <div class="section">
                     <h2>💡 Análise Financeira</h2>
                     <div class="summary-box">
-                        ${expenseSupermarket > 0 
-                            ? `<strong>Supermercado:</strong> R$ ${expenseSupermarket.toLocaleString('pt-BR', {minimumFractionDigits: 2})} (${((expenseSupermarket / totalExpenses) * 100).toFixed(1)}% das despesas)`
-                            : 'Sem despesas de supermercado registradas'
-                        }
+                        <strong>Detalhamento de Despesas:</strong><br>
+                        Supermercado: ${((expenseSupermarket / totalExpenses) * 100).toFixed(1)}% | 
+                        Moradia: ${((expenseHousing / totalExpenses) * 100).toFixed(1)}% | 
+                        Saúde: ${((expenseHealth / totalExpenses) * 100).toFixed(1)}% | 
+                        Carro: ${((expenseCar / totalExpenses) * 100).toFixed(1)}% | 
+                        Viagem: ${((expenseTravel / totalExpenses) * 100).toFixed(1)}% | 
+                        Outras: ${((expenseOther / totalExpenses) * 100).toFixed(1)}%
                     </div>
                     <div class="summary-box">
                         ${netResult > 0 
@@ -712,6 +839,7 @@
 
                 <div class="button-group">
                     <button onclick="location.reload()">Novo relatório</button>
+                    <button class="primary" onclick="exportReportData('${monthYear}', ${bankXP}, ${bankItau}, ${bankCaixa}, ${bankMercadoPago}, ${bankBradesco})">📥 Exportar Dados</button>
                     <button class="primary" onclick="window.print()">Imprimir / Salvar PDF</button>
                 </div>
             `;
@@ -819,18 +947,91 @@
             }
         }
 
+        function exportReportData(monthYear, bankXP, bankItau, bankCaixa, bankMercadoPago, bankBradesco) {
+            const currentWealth = bankXP + bankItau + bankCaixa + bankMercadoPago + bankBradesco;
+            
+            const data = {
+                monthYear: monthYear,
+                currentWealth: currentWealth,
+                bankXP: bankXP,
+                bankItau: bankItau,
+                bankCaixa: bankCaixa,
+                bankMercadoPago: bankMercadoPago,
+                bankBradesco: bankBradesco,
+                exportDate: new Date().toLocaleString('pt-BR'),
+                version: '1.0'
+            };
+
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            
+            const cleanMonth = monthYear.replace(/\s+/g, '-').toLowerCase();
+            link.href = url;
+            link.download = `relatorio-patrimonial-${cleanMonth}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+
+        function loadPreviousReport() {
+            const file = document.getElementById('fileUploadHistory').files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    
+                    // Preenche o saldo anterior com o patrimônio atual do arquivo
+                    document.getElementById('previousWealth').value = 'R$ ' + data.currentWealth.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+                    
+                    // Mostra mensagem de sucesso
+                    const status = document.getElementById('uploadStatus');
+                    status.textContent = `✅ Relatório carregado! ${data.monthYear} → Saldo anterior: R$ ${data.currentWealth.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+                    status.style.color = '#27ae60';
+                    
+                } catch (error) {
+                    const status = document.getElementById('uploadStatus');
+                    status.textContent = '❌ Erro ao carregar arquivo. Verifique se é um JSON válido.';
+                    status.style.color = '#e74c3c';
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // Inicializa formatadores ao carregar a página
+        document.addEventListener('DOMContentLoaded', function() {
+            attachCurrencyFormatters();
+            
+            // Listener para upload de arquivo anterior
+            document.getElementById('fileUploadHistory').addEventListener('change', loadPreviousReport);
+        });
+
         function resetForm() {
             document.getElementById('bankXP').value = '';
             document.getElementById('bankItau').value = '';
             document.getElementById('bankCaixa').value = '';
             document.getElementById('bankMercadoPago').value = '';
             document.getElementById('bankBradesco').value = '';
+            
+            document.getElementById('salarydad').value = '';
             document.getElementById('pensionDad').value = '';
+            document.getElementById('salarymom').value = '';
             document.getElementById('pensionMom').value = '';
+            
             document.getElementById('rentalSaoMateus').value = '';
             document.getElementById('rentalMaua').value = '';
+            
             document.getElementById('expenseSupermarket').value = '';
+            document.getElementById('expenseHousing').value = '';
+            document.getElementById('expenseHealth').value = '';
+            document.getElementById('expenseCar').value = '';
+            document.getElementById('expenseTravel').value = '';
             document.getElementById('expenseOther').value = '';
+            
             document.getElementById('previousWealth').value = '';
             document.getElementById('monthYear').value = '';
             document.getElementById('dashboardSection').style.display = 'none';
