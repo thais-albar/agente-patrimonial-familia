@@ -205,7 +205,8 @@
             border-radius: 8px;
             padding: 1.5rem;
             position: relative;
-            min-height: 400px;
+            height: 350px;
+            width: 100%;
         }
         
         .chart-container h3 {
@@ -717,71 +718,97 @@
 
             dashboardSection.innerHTML = dashboardHTML;
 
+            // Aguarda mais tempo para garantir que o DOM foi atualizado
             setTimeout(() => {
                 createCharts(totalIncome, totalExpenses, currentWealth, previousWealth);
-            }, 100);
+            }, 300);
         }
 
         function createCharts(totalIncome, totalExpenses, currentWealth, previousWealth) {
-            const ctx1 = document.getElementById('pieChart');
-            const ctx2 = document.getElementById('evolutionChart');
+            // Aguarda os elementos estarem no DOM
+            setTimeout(() => {
+                const ctx1 = document.getElementById('pieChart');
+                const ctx2 = document.getElementById('evolutionChart');
 
-            if (chartInstances.pie) chartInstances.pie.destroy();
-            if (chartInstances.evolution) chartInstances.evolution.destroy();
+                if (!ctx1 || !ctx2) {
+                    console.warn('Gráficos não encontrados no DOM');
+                    return;
+                }
 
-            chartInstances.pie = new Chart(ctx1, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Receita', 'Despesas'],
-                    datasets: [{
-                        data: [totalIncome, totalExpenses],
-                        backgroundColor: ['#27ae60', '#e74c3c'],
-                        borderColor: ['#1e8449', '#c0392b'],
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: { usePointStyle: true, font: { size: 13 } }
-                        }
+                // Destrói gráficos antigos se existirem
+                if (chartInstances.pie) {
+                    try {
+                        chartInstances.pie.destroy();
+                    } catch (e) {
+                        console.warn('Erro ao destruir gráfico anterior');
                     }
                 }
-            });
+                if (chartInstances.evolution) {
+                    try {
+                        chartInstances.evolution.destroy();
+                    } catch (e) {
+                        console.warn('Erro ao destruir gráfico anterior');
+                    }
+                }
 
-            chartInstances.evolution = new Chart(ctx2, {
-                type: 'bar',
-                data: {
-                    labels: ['Anterior', 'Atual'],
-                    datasets: [{
-                        label: 'Patrimônio (R$)',
-                        data: [previousWealth, currentWealth],
-                        backgroundColor: ['#3498db', '#27ae60'],
-                        borderColor: ['#2980b9', '#1e8449'],
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: true, labels: { font: { size: 13 } } }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: (v) => 'R$ ' + v.toLocaleString('pt-BR', {maximumFractionDigits: 0}),
-                                font: { size: 12 }
-                            }
+                try {
+                    chartInstances.pie = new Chart(ctx1, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Receita', 'Despesas'],
+                            datasets: [{
+                                data: [totalIncome, totalExpenses],
+                                backgroundColor: ['#27ae60', '#e74c3c'],
+                                borderColor: ['#1e8449', '#c0392b'],
+                                borderWidth: 2
+                            }]
                         },
-                        x: { ticks: { font: { size: 12 } } }
-                    }
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom',
+                                    labels: { usePointStyle: true, font: { size: 13 } }
+                                }
+                            }
+                        }
+                    });
+
+                    chartInstances.evolution = new Chart(ctx2, {
+                        type: 'bar',
+                        data: {
+                            labels: ['Anterior', 'Atual'],
+                            datasets: [{
+                                label: 'Patrimônio (R$)',
+                                data: [previousWealth, currentWealth],
+                                backgroundColor: ['#3498db', '#27ae60'],
+                                borderColor: ['#2980b9', '#1e8449'],
+                                borderWidth: 2
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: { display: true, labels: { font: { size: 13 } } }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        callback: (v) => 'R$ ' + v.toLocaleString('pt-BR', {maximumFractionDigits: 0}),
+                                        font: { size: 12 }
+                                    }
+                                },
+                                x: { ticks: { font: { size: 12 } } }
+                            }
+                        }
+                    });
+                } catch (e) {
+                    console.error('Erro ao criar gráficos:', e);
                 }
-            });
+            }, 200);
         }
 
         function saveHistoricalData(data) {
