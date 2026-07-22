@@ -338,14 +338,34 @@
 
         <div id="formSection">
             <div class="section">
-                <h2>📸 Extratos Bancários e Investimentos</h2>
-                <p style="font-size: 13px; color: #666; margin-bottom: 1rem;">Carregue fotos ou prints de seus extratos bancários, corretoras e investimentos</p>
-                <div class="upload-area" onclick="document.getElementById('fileInput').click();">
-                    <strong>Clique aqui para carregar imagens</strong>
-                    <p>ou arraste arquivos</p>
-                    <p style="font-size: 12px; color: #999;">PNG ou JPG - extratos de bancos, corretoras, investimentos</p>
+                <h2>💰 Saldos de Investimentos e Bancos</h2>
+                <p style="font-size: 13px; color: #666; margin-bottom: 1rem;">Digite o saldo total de cada banco/corretora</p>
+                <div class="form-row">
+                    <div class="form-item">
+                        <label>XP (R$)</label>
+                        <input type="number" id="bankXP" placeholder="0.00" step="0.01" />
+                    </div>
+                    <div class="form-item">
+                        <label>Itaú (R$)</label>
+                        <input type="number" id="bankItau" placeholder="0.00" step="0.01" />
+                    </div>
                 </div>
-                <div class="image-preview" id="imagePreview"></div>
+                <div class="form-row">
+                    <div class="form-item">
+                        <label>Caixa (R$)</label>
+                        <input type="number" id="bankCaixa" placeholder="0.00" step="0.01" />
+                    </div>
+                    <div class="form-item">
+                        <label>Mercado Pago (R$)</label>
+                        <input type="number" id="bankMercadoPago" placeholder="0.00" step="0.01" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-item">
+                        <label>Bradesco (R$)</label>
+                        <input type="number" id="bankBradesco" placeholder="0.00" step="0.01" />
+                    </div>
+                </div>
             </div>
 
             <div class="section">
@@ -422,43 +442,15 @@
     </div>
 
     <script>
-        const fileInput = document.getElementById('fileInput');
-        const imagePreview = document.getElementById('imagePreview');
-        let uploadedImages = [];
         let chartInstances = {};
 
-        fileInput.addEventListener('change', handleFileUpload);
-
-        function handleFileUpload(e) {
-            const files = Array.from(e.target.files);
-            files.forEach(file => {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    uploadedImages.push({
-                        name: file.name,
-                        data: event.target.result
-                    });
-                    renderImagePreview();
-                };
-                reader.readAsDataURL(file);
-            });
-        }
-
-        function renderImagePreview() {
-            imagePreview.innerHTML = uploadedImages.map((img, idx) => `
-                <div class="image-item">
-                    <img src="${img.data}" alt="Preview">
-                    <button class="remove-btn" onclick="removeImage(${idx})">✕</button>
-                </div>
-            `).join('');
-        }
-
-        function removeImage(idx) {
-            uploadedImages.splice(idx, 1);
-            renderImagePreview();
-        }
-
         function generateReport() {
+            const bankXP = parseFloat(document.getElementById('bankXP').value) || 0;
+            const bankItau = parseFloat(document.getElementById('bankItau').value) || 0;
+            const bankCaixa = parseFloat(document.getElementById('bankCaixa').value) || 0;
+            const bankMercadoPago = parseFloat(document.getElementById('bankMercadoPago').value) || 0;
+            const bankBradesco = parseFloat(document.getElementById('bankBradesco').value) || 0;
+            
             const pensionDad = parseFloat(document.getElementById('pensionDad').value) || 0;
             const pensionMom = parseFloat(document.getElementById('pensionMom').value) || 0;
             const rentalSaoMateus = parseFloat(document.getElementById('rentalSaoMateus').value) || 0;
@@ -467,6 +459,8 @@
             const expenseOther = parseFloat(document.getElementById('expenseOther').value) || 0;
             const previousWealth = parseFloat(document.getElementById('previousWealth').value) || 0;
             const monthYear = document.getElementById('monthYear').value || 'Mês Atual';
+            
+            const currentWealth = bankXP + bankItau + bankCaixa + bankMercadoPago + bankBradesco;
 
             const dashboardSection = document.getElementById('dashboardSection');
             dashboardSection.style.display = 'block';
@@ -476,15 +470,19 @@
             const netResult = totalIncome - totalExpenses;
             const savingsRate = totalIncome > 0 ? (netResult / totalIncome) * 100 : 0;
             
-            let currentWealth = previousWealth + netResult;
-            let wealthEvolution = currentWealth - previousWealth;
-            let rentability = previousWealth > 0 ? (wealthEvolution / previousWealth) * 100 : 0;
+            const wealthEvolution = currentWealth - previousWealth;
+            const rentability = previousWealth > 0 ? (wealthEvolution / previousWealth) * 100 : 0;
 
             saveHistoricalData({
                 monthYear,
                 currentWealth,
                 totalIncome,
-                totalExpenses
+                totalExpenses,
+                bankXP,
+                bankItau,
+                bankCaixa,
+                bankMercadoPago,
+                bankBradesco
             });
 
             const dashboardHTML = `
@@ -529,6 +527,44 @@
                         <h3>Evolução Patrimonial</h3>
                         <canvas id="evolutionChart"></canvas>
                     </div>
+                </div>
+
+                <div class="section">
+                    <h2>🏦 Detalhamento de Investimentos e Bancos</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Instituição</th>
+                                <th class="currency">Saldo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="padding-left: 2rem;">XP</td>
+                                <td class="currency">R$ ${bankXP.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 2rem;">Itaú</td>
+                                <td class="currency">R$ ${bankItau.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 2rem;">Caixa</td>
+                                <td class="currency">R$ ${bankCaixa.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 2rem;">Mercado Pago</td>
+                                <td class="currency">R$ ${bankMercadoPago.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 2rem;">Bradesco</td>
+                                <td class="currency">R$ ${bankBradesco.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                            </tr>
+                            <tr style="background: #f5f5f5; font-weight: 600;">
+                                <td><strong>Total Investimentos</strong></td>
+                                <td class="currency"><strong>R$ ${currentWealth.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
 
                 <div class="section">
@@ -757,6 +793,11 @@
         }
 
         function resetForm() {
+            document.getElementById('bankXP').value = '';
+            document.getElementById('bankItau').value = '';
+            document.getElementById('bankCaixa').value = '';
+            document.getElementById('bankMercadoPago').value = '';
+            document.getElementById('bankBradesco').value = '';
             document.getElementById('pensionDad').value = '';
             document.getElementById('pensionMom').value = '';
             document.getElementById('rentalSaoMateus').value = '';
@@ -765,8 +806,6 @@
             document.getElementById('expenseOther').value = '';
             document.getElementById('previousWealth').value = '';
             document.getElementById('monthYear').value = '';
-            uploadedImages = [];
-            imagePreview.innerHTML = '';
             document.getElementById('dashboardSection').style.display = 'none';
         }
     </script>
