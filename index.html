@@ -480,6 +480,7 @@
 
     <script>
         let chartInstances = {};
+        window.currentHistory = [];
 
         // Formata inputs como moeda em tempo real
         function formatCurrency(input) {
@@ -595,9 +596,71 @@
                     </div>
                 </div>
 
+                ${window.currentHistory && window.currentHistory.length > 1 ? `
+                <div class="section">
+                    <h2>📈 Histórico Acumulado (${window.currentHistory.length} meses)</h2>
+                    
+                    <div class="charts-grid">
+                        <div class="chart-container">
+                            <h3>Evolução de Receitas</h3>
+                            <canvas id="revenueHistoryChart"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <h3>Evolução de Despesas</h3>
+                            <canvas id="expenseHistoryChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="charts-grid">
+                        <div class="chart-container" style="grid-column: 1 / -1;">
+                            <h3>Evolução do Patrimônio</h3>
+                            <canvas id="wealthHistoryChart"></canvas>
+                        </div>
+                    </div>
+
+                    <h3 style="margin-top: 2rem; margin-bottom: 1rem;">Tabela Comparativa de Meses</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Mês</th>
+                                <th class="currency">Receita</th>
+                                <th class="currency">Despesa</th>
+                                <th class="currency">Sobra</th>
+                                <th class="currency">Patrimônio</th>
+                                <th class="currency">Evolução</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${window.currentHistory.map((month, index) => {
+                                const sobra = month.totalIncome - month.totalExpenses;
+                                const evolucao = index > 0 ? month.currentWealth - window.currentHistory[index - 1].currentWealth : 0;
+                                return `
+                                <tr ${index === window.currentHistory.length - 1 ? 'style="background: #d5f4e6; font-weight: 600;"' : ''}>
+                                    <td>${month.monthYear}</td>
+                                    <td class="currency">R$ ${month.totalIncome.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                                    <td class="currency">R$ ${month.totalExpenses.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                                    <td class="currency" style="color: ${sobra >= 0 ? '#27ae60' : '#e74c3c'};"><strong>R$ ${sobra.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</strong></td>
+                                    <td class="currency">R$ ${month.currentWealth.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                                    <td class="currency" style="color: ${evolucao >= 0 ? '#27ae60' : '#e74c3c'};"><strong>${evolucao >= 0 ? '+' : ''}R$ ${evolucao.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</strong></td>
+                                </tr>
+                                `;
+                            }).join('')}
+                            <tr style="background: #f5f5f5; font-weight: 600;">
+                                <td><strong>TOTAL ${window.currentHistory.length} MESES</strong></td>
+                                <td class="currency"><strong>R$ ${window.currentHistory.reduce((a, m) => a + m.totalIncome, 0).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</strong></td>
+                                <td class="currency"><strong>R$ ${window.currentHistory.reduce((a, m) => a + m.totalExpenses, 0).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</strong></td>
+                                <td class="currency"><strong style="color: #27ae60;">R$ ${(window.currentHistory.reduce((a, m) => a + m.totalIncome, 0) - window.currentHistory.reduce((a, m) => a + m.totalExpenses, 0)).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</strong></td>
+                                <td class="currency"><strong>R$ ${window.currentHistory[window.currentHistory.length - 1].currentWealth.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</strong></td>
+                                <td class="currency"><strong style="color: #27ae60;">+R$ ${(window.currentHistory[window.currentHistory.length - 1].currentWealth - window.currentHistory[0].currentWealth).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                ` : ''}
+
                 <div class="charts-grid">
                     <div class="chart-container">
-                        <h3>Receita vs Despesas</h3>
+                        <h3>Receita vs Despesas (Mês Atual)</h3>
                         <canvas id="pieChart"></canvas>
                     </div>
                     <div class="chart-container">
@@ -839,7 +902,7 @@
 
                 <div class="button-group">
                     <button onclick="location.reload()">Novo relatório</button>
-                    <button class="primary" onclick="exportReportData('${monthYear}', ${bankXP}, ${bankItau}, ${bankCaixa}, ${bankMercadoPago}, ${bankBradesco})">📥 Exportar Dados</button>
+                    <button class="primary" onclick="exportReportData('${monthYear}', ${salaryDad}, ${pensionDad}, ${salaryMom}, ${pensionMom}, ${rentalSaoMateus}, ${rentalMaua}, ${expenseSupermarket}, ${expenseHousing}, ${expenseHealth}, ${expenseCar}, ${expenseTravel}, ${expenseOther}, ${bankXP}, ${bankItau}, ${bankCaixa}, ${bankMercadoPago}, ${bankBradesco})">📥 Exportar Dados</button>
                     <button class="primary" onclick="window.print()">Imprimir / Salvar PDF</button>
                 </div>
             `;
@@ -849,6 +912,7 @@
             // Aguarda mais tempo para garantir que o DOM foi atualizado
             setTimeout(() => {
                 createCharts(totalIncome, totalExpenses, currentWealth, previousWealth);
+                createHistoryCharts();
             }, 300);
         }
 
@@ -939,6 +1003,141 @@
             }, 200);
         }
 
+        function createHistoryCharts() {
+            if (!window.currentHistory || window.currentHistory.length <= 1) return;
+
+            const months = window.currentHistory.map(m => m.monthYear);
+            const incomes = window.currentHistory.map(m => m.totalIncome);
+            const expenses = window.currentHistory.map(m => m.totalExpenses);
+            const wealths = window.currentHistory.map(m => m.currentWealth);
+
+            // Gráfico de Receitas
+            setTimeout(() => {
+                const ctx1 = document.getElementById('revenueHistoryChart');
+                if (ctx1) {
+                    if (window.chartHistoryIncome) window.chartHistoryIncome.destroy();
+                    window.chartHistoryIncome = new Chart(ctx1, {
+                        type: 'line',
+                        data: {
+                            labels: months,
+                            datasets: [{
+                                label: 'Receita Total',
+                                data: incomes,
+                                borderColor: '#27ae60',
+                                backgroundColor: 'rgba(39, 174, 96, 0.1)',
+                                borderWidth: 2,
+                                fill: true,
+                                tension: 0.4,
+                                pointRadius: 5,
+                                pointBackgroundColor: '#27ae60'
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: { display: true, labels: { font: { size: 13 } } }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        callback: (v) => 'R$ ' + v.toLocaleString('pt-BR', {maximumFractionDigits: 0}),
+                                        font: { size: 11 }
+                                    }
+                                },
+                                x: { ticks: { font: { size: 11 } } }
+                            }
+                        }
+                    });
+                }
+            }, 100);
+
+            // Gráfico de Despesas
+            setTimeout(() => {
+                const ctx2 = document.getElementById('expenseHistoryChart');
+                if (ctx2) {
+                    if (window.chartHistoryExpense) window.chartHistoryExpense.destroy();
+                    window.chartHistoryExpense = new Chart(ctx2, {
+                        type: 'line',
+                        data: {
+                            labels: months,
+                            datasets: [{
+                                label: 'Despesa Total',
+                                data: expenses,
+                                borderColor: '#e74c3c',
+                                backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                                borderWidth: 2,
+                                fill: true,
+                                tension: 0.4,
+                                pointRadius: 5,
+                                pointBackgroundColor: '#e74c3c'
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: { display: true, labels: { font: { size: 13 } } }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        callback: (v) => 'R$ ' + v.toLocaleString('pt-BR', {maximumFractionDigits: 0}),
+                                        font: { size: 11 }
+                                    }
+                                },
+                                x: { ticks: { font: { size: 11 } } }
+                            }
+                        }
+                    });
+                }
+            }, 150);
+
+            // Gráfico de Patrimônio
+            setTimeout(() => {
+                const ctx3 = document.getElementById('wealthHistoryChart');
+                if (ctx3) {
+                    if (window.chartHistoryWealth) window.chartHistoryWealth.destroy();
+                    window.chartHistoryWealth = new Chart(ctx3, {
+                        type: 'line',
+                        data: {
+                            labels: months,
+                            datasets: [{
+                                label: 'Patrimônio Total',
+                                data: wealths,
+                                borderColor: '#3498db',
+                                backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                                borderWidth: 3,
+                                fill: true,
+                                tension: 0.4,
+                                pointRadius: 6,
+                                pointBackgroundColor: '#3498db'
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: { display: true, labels: { font: { size: 13 } } }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: false,
+                                    ticks: {
+                                        callback: (v) => 'R$ ' + v.toLocaleString('pt-BR', {maximumFractionDigits: 0}),
+                                        font: { size: 11 }
+                                    }
+                                },
+                                x: { ticks: { font: { size: 11 } } }
+                            }
+                        }
+                    });
+                }
+            }, 200);
+        }
+
         function saveHistoricalData(data) {
             try {
                 localStorage.setItem('patrimonial_history', JSON.stringify(data));
@@ -947,19 +1146,46 @@
             }
         }
 
-        function exportReportData(monthYear, bankXP, bankItau, bankCaixa, bankMercadoPago, bankBradesco) {
+        function exportReportData(monthYear, salaryDad, pensionDad, salaryMom, pensionMom, rentalSaoMateus, rentalMaua, expenseSupermarket, expenseHousing, expenseHealth, expenseCar, expenseTravel, expenseOther, bankXP, bankItau, bankCaixa, bankMercadoPago, bankBradesco) {
             const currentWealth = bankXP + bankItau + bankCaixa + bankMercadoPago + bankBradesco;
+            const totalIncomeDad = salaryDad + pensionDad;
+            const totalIncomeMom = salaryMom + pensionMom;
+            const totalRentals = rentalSaoMateus + rentalMaua;
+            const totalIncome = totalIncomeDad + totalIncomeMom + totalRentals;
+            const totalExpenses = expenseSupermarket + expenseHousing + expenseHealth + expenseCar + expenseTravel + expenseOther;
             
-            const data = {
+            // Recupera histórico anterior se existir
+            let history = window.currentHistory || [];
+            
+            // Adiciona dados do mês atual ao histórico
+            history.push({
                 monthYear: monthYear,
+                totalIncome: totalIncome,
+                totalExpenses: totalExpenses,
                 currentWealth: currentWealth,
                 bankXP: bankXP,
                 bankItau: bankItau,
                 bankCaixa: bankCaixa,
                 bankMercadoPago: bankMercadoPago,
                 bankBradesco: bankBradesco,
+                salaryDad: salaryDad,
+                pensionDad: pensionDad,
+                salaryMom: salaryMom,
+                pensionMom: pensionMom,
+                rentalSaoMateus: rentalSaoMateus,
+                rentalMaua: rentalMaua,
+                expenseSupermarket: expenseSupermarket,
+                expenseHousing: expenseHousing,
+                expenseHealth: expenseHealth,
+                expenseCar: expenseCar,
+                expenseTravel: expenseTravel,
+                expenseOther: expenseOther
+            });
+            
+            const data = {
                 exportDate: new Date().toLocaleString('pt-BR'),
-                version: '1.0'
+                version: '2.0',
+                history: history
             };
 
             const dataStr = JSON.stringify(data, null, 2);
@@ -985,13 +1211,33 @@
                 try {
                     const data = JSON.parse(e.target.result);
                     
-                    // Preenche o saldo anterior com o patrimônio atual do arquivo
-                    document.getElementById('previousWealth').value = 'R$ ' + data.currentWealth.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+                    // Suporta tanto formato antigo quanto novo
+                    let history = [];
+                    let lastMonthData = null;
                     
-                    // Mostra mensagem de sucesso
-                    const status = document.getElementById('uploadStatus');
-                    status.textContent = `✅ Relatório carregado! ${data.monthYear} → Saldo anterior: R$ ${data.currentWealth.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
-                    status.style.color = '#27ae60';
+                    if (data.history && Array.isArray(data.history)) {
+                        // Novo formato com histórico acumulativo
+                        history = data.history;
+                        lastMonthData = history[history.length - 1];
+                        
+                        // Armazena histórico global para uso posterior
+                        window.currentHistory = history;
+                    } else if (data.currentWealth) {
+                        // Formato antigo
+                        lastMonthData = data;
+                        window.currentHistory = [data];
+                    }
+                    
+                    if (lastMonthData) {
+                        // Preenche o saldo anterior
+                        document.getElementById('previousWealth').value = 'R$ ' + lastMonthData.currentWealth.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+                        
+                        // Mostra mensagem de sucesso
+                        const status = document.getElementById('uploadStatus');
+                        const monthCount = history.length;
+                        status.textContent = `✅ Relatório carregado! ${lastMonthData.monthYear} (Histórico: ${monthCount} mês${monthCount > 1 ? 'es' : ''}) → Saldo anterior: R$ ${lastMonthData.currentWealth.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+                        status.style.color = '#27ae60';
+                    }
                     
                 } catch (error) {
                     const status = document.getElementById('uploadStatus');
